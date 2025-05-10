@@ -1647,3 +1647,9 @@ body.modal-open #config-container {
     display: flex;
     align-items: center;
 }
+
+/* 使通知的显示层级正确，给予一定透明度以保持美观 */
+.toast-container {
+    z-index: 9999;
+    opacity: 95%;
+}
