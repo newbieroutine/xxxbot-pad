@@ -1641,3 +1641,9 @@ body.modal-open #config-container {
     border-radius: 20px;
     border: 2px solid #1a1a1a;
 }
+
+/* 使插件管理switch居中 */
+.form-check {
+    display: flex;
+    align-items: center;
+}
