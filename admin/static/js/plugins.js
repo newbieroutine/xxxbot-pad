@@ -2,10 +2,11 @@
 let plugins = [];
 let currentPluginId = null;
 let currentFilter = 'all';
-let currentFramework = 'original'; // 默认显示原始框架插件
+let currentFramework = 'original'; // 默认显示原始框架
 let configModal = null;
 let uploadModal = null;
 let marketPlugins = [];
+let sortedPlugins = []; // 添加全局变量
 
 // 一些辅助函数
 function getFieldLabel(field) {
@@ -1471,7 +1472,7 @@ function renderMarketPlugins(marketPluginsList) {
     // 对插件列表进行排序
     // 1. 需要更新的插件放在前面
     // 2. 然后按照返回顺序的倒序排列（最新添加的先显示）
-    const sortedPlugins = [...marketPluginsList].sort((a, b) => {
+    sortedPlugins = [...marketPluginsList].sort((a, b) => {
         // 检查是否有插件需要更新
         const aInstalled = plugins && Array.isArray(plugins) ? plugins.find(p => p.name === a.name) : null;
         const bInstalled = plugins && Array.isArray(plugins) ? plugins.find(p => p.name === b.name) : null;
@@ -1975,10 +1976,17 @@ function storeOfflineSubmission(pluginData, tempId) {
 async function installPlugin(plugin) {
     return new Promise(async (resolve, reject) => {
         // 查找安装按钮（如果存在）
-        const index = sortedPlugins.findIndex(p => p.name === plugin.name);
-        const button = index >= 0 ? 
-            document.querySelector(`.btn-install-plugin[data-plugin-index="${index}"]`) : 
-            null;
+        let index = -1;
+        let button = null;
+        
+        // 安全地查找按钮索引
+        if (Array.isArray(sortedPlugins) && sortedPlugins.length > 0) {
+            index = sortedPlugins.findIndex(p => p.name === plugin.name);
+            if (index >= 0) {
+                button = document.querySelector(`.btn-install-plugin[data-plugin-index="${index}"]`);
+            }
+        }
+        
         const originalText = button ? button.innerHTML : null;
 
         // 显示加载状态

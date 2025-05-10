@@ -406,6 +406,20 @@
             font-size: 0.85rem;
         }
     }
+
+    /* 隐藏可更新标签和黄色背景 */
+    .badge:empty, .badge:not(.bg-primary):not(.bg-success):not(.bg-danger):not(.bg-info):not(.bg-secondary) {
+        display: none !important;
+    }
+
+    [class*="bg-warning"], [class*="bg-yellow"], [style*="background"][style*="ff"][style*="00"] {
+        background: none !important;
+        background-color: transparent !important;
+    }
+
+    .update-badge, .update-indicator, [class*="can-update"], .plugin-update-badge {
+        display: none !important;
+    }
 </style>
 {% endblock %}
 
@@ -737,4 +751,37 @@
 <script src="/static/js/fix_plugins_display.js?v={{ version }}"></script>
 <!-- 引入DOW框架插件专用修复脚本 -->
 <script src="/admin/static/js/fix_dow_plugins.js?v={{ version }}"></script>
+<script>
+// 轻量级脚本，只处理"可更新"标签和黄色背景
+(function() {
+    // 立即执行一次
+    hideUpdateBadges();
+    
+    // DOM加载后再次执行
+    document.addEventListener('DOMContentLoaded', function() {
+        hideUpdateBadges();
+        
+        // 使用MutationObserver持续监控变化
+        const observer = new MutationObserver(hideUpdateBadges);
+        observer.observe(document.body, { 
+            childList: true, 
+            subtree: true 
+        });
+    });
+    
+    function hideUpdateBadges() {
+        // 隐藏包含"可更新"文本的元素
+        document.querySelectorAll('.badge, span, div').forEach(el => {
+            if (el.textContent && el.textContent.trim() === '可更新') {
+                el.style.display = 'none';
+            }
+        });
+        
+        // 移除黄色背景
+        document.querySelectorAll('[class*="bg-warning"], [class*="bg-yellow"]').forEach(el => {
+            el.style.backgroundColor = 'transparent';
+        });
+    }
+})();
+</script>
 {% endblock %}
