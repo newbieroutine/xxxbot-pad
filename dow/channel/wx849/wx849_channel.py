@@ -3748,7 +3748,7 @@ class WX849Channel(ChatChannel):
                         image_io: BytesIO = image_path
                         image_io.seek(0)  # 重置指针到起始位置
                         # 保存为本地文件
-                        async with open(tmp_path, "wb") as f:
+                        with open(tmp_path, "wb") as f:
                             f.write(image_io.getvalue())  # 直接写入二进制数据
                         image_path = tmp_path
                         result = await self._send_image(receiver, image_path, context)
