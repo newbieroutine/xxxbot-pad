@@ -63,6 +63,7 @@ class MessageMonitor:
     def __init__(self):
         self.is_running = True
         self.last_check_time = 0
+        self.last_file_scan_time = time.time()  # 添加上次扫描文件的时间
 
         # 消息文件路径
         self.message_file_paths = [
@@ -76,14 +77,19 @@ class MessageMonitor:
         self.file_positions = {}
         # 扩展文件路径模式
         self.actual_file_paths = []
+        self._scan_log_files()  # 提取为单独方法
+        
+        logger.info(f"监控的日志文件: {self.actual_file_paths}")
+        
+    def _scan_log_files(self):
+        """扫描并更新日志文件列表"""
         for pattern in self.message_file_paths:
             matching_files = glob.glob(pattern)
             for file_path in matching_files:
                 if os.path.exists(file_path) and file_path not in self.actual_file_paths:
                     self.actual_file_paths.append(file_path)
                     self.file_positions[file_path] = os.path.getsize(file_path)
-
-        logger.info(f"监控的日志文件: {self.actual_file_paths}")
+                    logger.info(f"添加日志文件到监控列表: {file_path}")
 
     def start(self):
         """启动监控"""
@@ -109,6 +115,26 @@ class MessageMonitor:
 
     def check_message_files(self):
         """检查消息文件变化"""
+        # 定期重新扫描日志文件（每10分钟）
+        current_time = time.time()
+        if current_time - self.last_file_scan_time > 600:  # 10分钟检查一次
+            self.last_file_scan_time = current_time
+            logger.info("定期重新扫描日志文件...")
+            self._scan_log_files()
+            
+            # 检查是否有不再存在的文件，从列表中移除
+            files_to_remove = []
+            for file_path in self.actual_file_paths:
+                if not os.path.exists(file_path):
+                    files_to_remove.append(file_path)
+                    logger.info(f"日志文件不再存在，从监控列表移除: {file_path}")
+            
+            for file_path in files_to_remove:
+                self.actual_file_paths.remove(file_path)
+                if file_path in self.file_positions:
+                    del self.file_positions[file_path]
+        
+        # 检查当前文件列表变化
         for file_path in self.actual_file_paths:
             if not os.path.exists(file_path):
                 continue
@@ -120,6 +146,7 @@ class MessageMonitor:
                 # 如果是新文件或文件被重置
                 if file_path not in self.file_positions or current_size < self.file_positions[file_path]:
                     self.file_positions[file_path] = 0
+                    logger.info(f"文件被重置或新添加，从头开始读取: {file_path}")
 
                 # 如果文件有新内容
                 if current_size > self.file_positions[file_path]:
