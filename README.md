@@ -19,8 +19,9 @@ XXXBot 是一个基于微信的智能机器人系统，通过整合多种 API �
 - **849 协议**：适用于 iPad 版本，使用 `/VXAPI` 路径前缀
 - **855 协议**：适用于安卓 PAD 版本，使用 `/api` 路径前缀
 - **ipad 协议**：适用于新版 iPad 协议，使用 `/api` 路径前缀
+- **Mac**: 适用于 Mac 协议，使用 `/api` 路径前缀（Mac 登录后请不要使用 pc 登录 bot）
 
-#### 框架模式支持
+#### 框架模式支持（暂时只支持 849，其他暂未测试）
 
 - **default**：使用原始框架（默认模式）
 - **dual**：双框架模式，同时运行原始框架和 DOW 框架
@@ -116,7 +117,7 @@ XXXBot 是一个基于微信的智能机器人系统，通过整合多种 API �
 ### 📦 系统要求
 
 - 🐍 Python 3.11+
-- 📱 微信客户端（支持 PAD 协议或 WeChatAPI）
+- 📱 WX 客户端
 - 🔋 Redis（用于数据缓存）
 - 🎥 FFmpeg（用于语音处理）
 - 🐳 Docker（可选，用于容器化部署）
@@ -220,12 +221,13 @@ XXXBot 是一个基于微信的智能机器人系统，通过整合多种 API �
 
    ```toml
    [Protocol]
-   version = "849"  # 可选值: "849", "855" 或 "ipad"
+   version = "849"  # 可选值: "849", "855" 或 "ipad"，"Mac"
    ```
 
    - **849**: 适用于 iPad 版本，使用 `/VXAPI` 路径前缀
    - **855**: 适用于安卓 PAD 版本，使用 `/api` 路径前缀
    - **ipad**: 适用于新版 iPad 协议，使用 `/api` 路径前缀
+   - **Mac**: 适用于 Mac 协议，使用 `/api` 路径前缀（Mac 登录后请不要使用 pc 登录 bot）
 
    系统会根据配置的协议版本自动选择正确的服务路径和 API 路径前缀。如果遇到 API 请求失败的情况，系统会自动尝试使用另一种协议路径，确保功能正常工作。
 
@@ -235,11 +237,10 @@ XXXBot 是一个基于微信的智能机器人系统，通过整合多种 API �
 
    ```toml
    [Framework]
-   type = "default"  # 可选值: "default", "dow" 或 "dual"
+   type = "default"  # 可选值: "default" 或 "dual"
    ```
 
    - **default**: 使用原始框架
-   - **dow**: 仅使用 DOW 框架
    - **dual**: 双框架模式，同时运行原始框架和 DOW 框架（先启动原始框架，然后启动 DOW 框架）
 
    在双框架模式下，系统会先启动原始框架，等待登录成功后再启动 DOW 框架。这样可以同时使用两个框架的功能，但会消耗更多资源。
@@ -258,8 +259,8 @@ XXXBot 是一个基于微信的智能机器人系统，通过整合多种 API �
    - ❗ **第二步**：启动 PAD 服务 📱
 
      - 根据你的协议版本选择相应的服务：
-       - **849 协议（iPad）**：进入`849/pad`目录，双击`linuxService.exe`文件
-       - **855 协议（安卓 PAD）**：进入`849/pad2`目录，双击`linuxService.exe`文件
+       - **849 协议（iPad）**：进入`849/pad`目录，双击`main.exe`文件
+       - **855 协议（安卓 PAD）**：进入`849/pad2`目录，双击`main.exe`文件
      - 等待窗口显示 PAD 服务启动成功
 
    - ⚠️ 请确保这两个服务窗口始终保持打开状态，不要关闭它们！
@@ -368,16 +369,6 @@ XXXBot 是一个基于微信的智能机器人系统，通过整合多种 API �
    ```
 
    我们已经更新了 `docker-compose.yml` 文件，添加了 `pull_policy: always` 设置，确保每次启动容器时都会检查并拉取最新的镜像。更多更新相关的详细信息，请查看 [UPDATE_GUIDE.md](UPDATE_GUIDE.md) 文件。
-
-3. **自定义管理员账号密码**（可选）
-
-   编辑 docker-compose.yml 文件，修改环境变量：
-
-   ```yaml
-   environment:
-     - ADMIN_USERNAME=your_username # 修改为您想要的用户名
-     - ADMIN_PASSWORD=your_password # 修改为您想要的密码
-   ```
 
 ### 🔍 访问后台
 
@@ -536,7 +527,7 @@ class YourPlugin(PluginBase):
 - **前端**：Bootstrap, Chart.js, AOS
 - **数据库**：SQLite (aiosqlite)
 - **缓存**：Redis
-- **微信接口**：PAD 协议或 WeChatAPI
+- **WX 接口**：PAD 协议或 WeChatAPI
 - **外部服务**：Dify API，Google Speech-to-Text
 - **容器化**：Docker
 - **Web 服务**：默认端口 9090，默认账号 admin/admin123
