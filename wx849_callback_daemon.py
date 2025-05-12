@@ -78,9 +78,9 @@ class MessageMonitor:
         # 扩展文件路径模式
         self.actual_file_paths = []
         self._scan_log_files()  # 提取为单独方法
-        
+
         logger.info(f"监控的日志文件: {self.actual_file_paths}")
-        
+
     def _scan_log_files(self):
         """扫描并更新日志文件列表"""
         for pattern in self.message_file_paths:
@@ -121,19 +121,19 @@ class MessageMonitor:
             self.last_file_scan_time = current_time
             logger.info("定期重新扫描日志文件...")
             self._scan_log_files()
-            
+
             # 检查是否有不再存在的文件，从列表中移除
             files_to_remove = []
             for file_path in self.actual_file_paths:
                 if not os.path.exists(file_path):
                     files_to_remove.append(file_path)
                     logger.info(f"日志文件不再存在，从监控列表移除: {file_path}")
-            
+
             for file_path in files_to_remove:
                 self.actual_file_paths.remove(file_path)
                 if file_path in self.file_positions:
                     del self.file_positions[file_path]
-        
+
         # 检查当前文件列表变化
         for file_path in self.actual_file_paths:
             if not os.path.exists(file_path):
@@ -461,7 +461,25 @@ class MessageMonitor:
 
                     # 检查是否@了机器人
                     is_at_bot = False
-                    for bot_name in ["小小x", "小x"]:
+                    # 从配置文件中读取机器人名称列表
+                    robot_names = []
+                    try:
+                        # 尝试从配置文件中读取机器人名称
+                        config_file = "dow/config.json"
+                        if os.path.exists(config_file):
+                            with open(config_file, "r", encoding="utf-8") as f:
+                                dow_config = json.load(f)
+                                robot_names = dow_config.get("robot_names", [])
+                                logger.info(f"从配置文件中读取到机器人名称列表: {robot_names}")
+                    except Exception as e:
+                        logger.error(f"读取配置文件中的机器人名称失败: {e}")
+
+                    # 如果配置文件中没有设置或读取失败，使用默认值
+                    if not robot_names:
+                        robot_names = ["小小x", "小x", "机器人"]
+                        logger.info(f"使用默认机器人名称列表: {robot_names}")
+
+                    for bot_name in robot_names:
                         if f"@{bot_name}" in content:
                             is_at_bot = True
                             logger.info(f"检测到@机器人: @{bot_name}")
