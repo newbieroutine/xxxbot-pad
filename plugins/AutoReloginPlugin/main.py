@@ -16,7 +16,7 @@ class AutoReloginPlugin(PluginBase):
         super().__init__()
         self.enable = True
         self.last_relogin_time = 0
-        self.relogin_interval = 60  # 默认60秒执行一次二次登录
+        self.relogin_interval = 7200  # 默认7200秒执行一次二次登录
         self.max_retry_count = 3  # 最大重试次数
         self.retry_interval = 60  # 重试间隔（秒）
         self.consecutive_failures = 0  # 连续失败次数
@@ -27,7 +27,7 @@ class AutoReloginPlugin(PluginBase):
         logger.info("自动二次登录插件已启用，将每{}秒执行一次二次登录", self.relogin_interval)
         self.last_relogin_time = time.time()
 
-    @schedule('interval', seconds=60)  # 每60秒执行一次
+    @schedule('interval', seconds=7200)  # 每7200秒执行一次
     async def auto_relogin(self, bot: WechatAPIClient):
         """定期执行二次登录"""
         if not self.enable:
