@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Optional, Dict, List, Any, Union, Set
 import sqlite3
 import glob
+from loguru import logger
 
 # 导入 tomllib 或 tomli 用于解析 TOML 文件
 try:
@@ -61,11 +62,30 @@ except ImportError as e:
     has_contacts_db = False
     print(f"联系人数据库模块导入失败: {e}")
 
-from loguru import logger
 import psutil
 import platform
 import socket
 import re
+
+# 导入系统统计API模块
+import os
+import sys
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)  # 将当前目录添加到模块搜索路径
+
+try:
+    # 直接从当前目录导入
+    from system_stats_api import handle_system_stats
+    logger.info("成功导入系统统计API模块")
+except ImportError as e:
+    logger.error(f"导入系统统计API模块失败: {e}")
+    # 定义一个简单的替代函数
+    async def handle_system_stats(request, type="system", time_range="1"):
+        return JSONResponse(content={
+            "success": False,
+            "error": "系统统计API模块未加载"
+        })
+
 
 # 导入GitHub加速服务工具
 # 注意：这里使用相对导入，因为admin目录不在Python模块搜索路径中
@@ -1510,6 +1530,26 @@ def setup_routes():
             "success": True,
             "data": get_system_status()
         }
+
+    # API: 系统统计 (需要认证)
+    @app.get("/api/system/stats", response_class=JSONResponse)
+    async def api_system_stats(request: Request, type: str = "system", time_range: str = "1"):
+        """系统统计API
+
+        参数:
+            type: 统计类型，可选值: messages(消息统计), system(系统信息)
+            time_range: 时间范围，仅在type=messages时有效，可选值: 1(今天), 7(本周), 30(本月)
+        """
+        # 检查认证状态
+        username = await check_auth(request)
+        if not username:
+            logger.error("访问系统统计API失败：未认证")
+            return JSONResponse(status_code=401, content={"success": False, "error": "未认证"})
+
+        logger.info(f"用户 {username} 请求系统统计数据，类型: {type}, 范围: {time_range}")
+
+        # 调用system_stats_api模块中的处理函数
+        return await handle_system_stats(request, type, time_range)
 
     # API: 系统信息 (需要认证)
     @app.get("/api/system/info", response_class=JSONResponse)

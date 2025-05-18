@@ -1,5 +1,5 @@
 {
-  "timestamp": 1747497081,
+  "timestamp": 1747569174,
   "data": {
     "success": true,
     "plugins": [
@@ -1066,6 +1066,29 @@
           {
             "name": "Dify Plugin",
             "id": 17
+          }
+        ],
+        "requirements": [],
+        "review_comment": ""
+      },
+      {
+        "name": "AIReport",
+        "description": "调用API信息，发送【文字】或【图片】版本咨询类插件。",
+        "author": "老金",
+        "version": "3.2",
+        "github_url": "https://github.com/KimYx0207/AIReport",
+        "icon": null,
+        "id": "2de239fe-d970-40a7-9ed5-86e0ce92c273",
+        "status": "approved",
+        "submit_time": "2025-05-18T16:02:26.779543",
+        "review_time": "2025-05-18T16:03:56.860724",
+        "update_time": null,
+        "downloads": 0,
+        "submitter_id": null,
+        "tags": [
+          {
+            "name": "工具",
+            "id": 1
           }
         ],
         "requirements": [],

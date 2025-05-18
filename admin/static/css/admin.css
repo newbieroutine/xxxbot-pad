@@ -1130,12 +1130,24 @@ p {
         flex: 1;
         justify-content: center;
         transition: all 0.2s ease;
+        width: 20%;
+        text-align: center;
     }
 
     .mobile-nav-item i {
         font-size: var(--font-size-lg);
         margin-bottom: var(--space-xs);
         transition: all 0.2s ease;
+    }
+
+    .mobile-nav-item span {
+        display: block;
+        width: 100%;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 10px;
     }
 
     .mobile-nav-item.active {
@@ -1255,7 +1267,7 @@ p {
 
 /* 添加移动端导航栏样式 */
 .mobile-nav {
-    display: none;
+    display: none !important; /* 默认情况下强制隐藏 */
     position: fixed;
     bottom: 0;
     left: 0;
@@ -1269,7 +1281,7 @@ p {
 
 @media (max-width: 992px) {
     .mobile-nav {
-        display: flex;
+        display: flex !important;
         justify-content: space-around;
         align-items: center;
     }

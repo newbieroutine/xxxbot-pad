@@ -13,7 +13,7 @@ class EventManager:
             if hasattr(method, '_event_type'):
                 event_type = getattr(method, '_event_type')
                 priority = getattr(method, '_priority', 50)
-                
+
                 if event_type not in cls._handlers:
                     cls._handlers[event_type] = []
                 cls._handlers[event_type].append((method, instance, priority))
@@ -21,12 +21,29 @@ class EventManager:
                 cls._handlers[event_type].sort(key=lambda x: x[2], reverse=True)
 
     @classmethod
-    async def emit(cls, event_type: str, *args, **kwargs) -> None:
-        """触发事件"""
+    async def emit(cls, event_type: str, *args, **kwargs):
+        """触发事件
+
+        Args:
+            event_type: 事件类型
+            *args: 位置参数
+            **kwargs: 关键字参数，可以包含 callback 回调函数
+
+        Returns:
+            如果有处理函数返回 False，则返回 False；否则返回 None
+        """
+        # 提取 callback 参数，如果没有则为 None
+        callback = kwargs.pop('callback', None)
+
         if event_type not in cls._handlers:
-            return
+            # 如果有回调函数，调用它并传递 None
+            if callback:
+                callback(None)
+            return None
 
         api_client, message = args
+        final_result = None
+
         for handler, instance, priority in cls._handlers[event_type]:
             # 只对 message 进行深拷贝，api_client 保持不变
             handler_args = (api_client, copy.deepcopy(message))
@@ -34,12 +51,25 @@ class EventManager:
 
             result = await handler(*handler_args, **new_kwargs)
 
+            # 记录最后一个非 None 的结果
+            if result is not None:
+                final_result = result
+
             if isinstance(result, bool):
                 # True 继续执行 False 停止执行
                 if not result:
-                    break
+                    # 如果有回调函数，调用它并传递结果
+                    if callback:
+                        callback(False)
+                    return False
             else:
                 continue  # 我也不知道你返回了个啥玩意，反正继续执行就是了
+
+        # 如果有回调函数，调用它并传递最终结果
+        if callback:
+            callback(final_result)
+
+        return final_result
 
     @classmethod
     def unbind_instance(cls, instance: object):
