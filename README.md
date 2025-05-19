@@ -575,49 +575,6 @@ XXXBot/
 - **请遵守相关法律法规，合法合规使用本项目**
 - **如果您使用了本项目，即表示您已阅读并同意上述免责声明**
 
-## 🙏 鸣谢
-
-本项目的开发离不开以下作者和项目的支持与贡献：
-
-<table style="border-collapse: collapse; border: none;">
-  <tr style="border: none;">
-    <td width="180" align="center" style="border: none; padding: 10px;">
-      <div style="border-radius: 50%; overflow: hidden; width: 120px; height: 120px; margin: 0 auto;">
-        <img src="https://avatars.githubusercontent.com/u/83214045" width="120" height="120">
-      </div>
-      <br>
-      <strong style="font-size: 16px;">HenryXiaoYang</strong>
-      <br>
-      <a href="https://github.com/HenryXiaoYang" style="text-decoration: none; color: #0366d6;">个人主页</a>
-    </td>
-    <td style="border: none; padding: 10px;">
-      <p style="margin-bottom: 8px; font-size: 15px;">项目：<a href="https://github.com/HenryXiaoYang/XYBotV2" style="text-decoration: none; color: #0366d6;">XYBotV2</a> - 本项目的重要参考源</p>
-      <p style="margin-top: 0; font-size: 15px;">提供了微信机器人的基础架构和核心功能，为本项目的开发提供了宝贵的参考。</p>
-    </td>
-  </tr>
-  <tr style="border: none;">
-    <td width="180" align="center" style="border: none; padding: 10px;">
-      <div style="border-radius: 50%; overflow: hidden; width: 120px; height: 120px; margin: 0 auto;">
-        <img src="https://avatars.githubusercontent.com/u/178422005" width="120" height="120">
-      </div>
-      <br>
-      <strong style="font-size: 16px;">heaven2028</strong>
-      <br>
-      <a href="https://github.com/heaven2028" style="text-decoration: none; color: #0366d6;">个人主页</a>
-    </td>
-    <td style="border: none; padding: 10px;">
-      <p style="margin-bottom: 8px; font-size: 15px;">与本项目作者共同完成的开发工作</p>
-      <p style="margin-top: 0; font-size: 15px;">在功能扩展、界面设计和系统优化方面做出了重要贡献。</p>
-    </td>
-  </tr>
-</table>
-
-同时感谢所有其他贡献者和使用的开源项目。
-
-## 📞 联系方式
-
-- **GitHub**: [https://github.com/NanSsye](https://github.com/NanSsye)
-- **官方交流群**：请查看上方[快速开始](#快速开始)部分的二维码
 
 ## 💻 管理后台界面展示
 
