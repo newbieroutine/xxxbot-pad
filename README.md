@@ -1,4 +1,3 @@
-# 🤖 XXXBot 机器人项目 🤖
 
 > ## ⚠️ 免责声明
 >
@@ -72,29 +71,6 @@ version = "849"  # 可选值：849, 855, ipad, Mac
 - 网络图片 URL 会先下载到本地再处理后发送
 
 ## 🚀 快速开始
-
-<table>
-  <tr>
-    <td width="50%">
-      <h3>💬 加入 XXXBot 交流群</h3>
-      <p>扫描右侧的二维码加入官方交流群，获取：</p>
-      <ul>
-        <li>💡 <strong>最新功能更新</strong>和使用技巧</li>
-        <li>👨‍💻 <strong>技术支持</strong>和问题解答</li>
-        <li>👥 与其他用户<strong>交流经验</strong></li>
-        <li>📝 <strong>插件开发</strong>和定制化帮助</li>
-      </ul>
-    </td>
-    <td width="25%" align="center">
-      <img src="https://github.com/user-attachments/assets/39f6eff3-bcaa-4bdf-87f2-fd887c26a4e7" alt="关注公众号进群" width="220">
-      <p><strong>XXXBot 交流群</strong></p>
-    </td>
-    <td width="25%" align="center">
-      <img src="https://github.com/user-attachments/assets/2dde3b46-85a1-4f22-8a54-3928ef59b85f" alt="感谢赞助" width="220">
-      <p><strong>感谢赞助</strong></p>
-    </td>
-  </tr>
-</table>
 
 ## ✨ 主要特性
 
